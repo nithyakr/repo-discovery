@@ -1,0 +1,23 @@
+scalar DateTime
+
+type Repository {
+    name: String!
+    owner: RepoOwner!
+    score: Int!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    starGazersCount: Int
+    watchersCount: Int
+    forksCount: Int
+    archived: Boolean
+    disabled: Boolean
+}
+
+type RepoOwner {
+    login: String!
+    url: String!
+}
+
+type QueryRepo {
+    find(createdFrom:DateTime!, language:String!): [Repository]!
+}
