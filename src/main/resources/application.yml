@@ -6,5 +6,11 @@ spring:
     resources:
       add-mappings: false
 logging:
-  index: ${LOGGING_INDEX_PREFIX:live-data}
   config: classpath:logback-${LOGGING_CONFIG_SUFFIX:development}.xml
+
+github:
+  base-url: https://api.github.com/
+  connect-timeout: 5s
+  read-timeout: 3s
+  default-fetch-count: 100
+

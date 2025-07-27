@@ -4,16 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Builder
 public class Repository {
     private String name;
+    private String fullName;
     private RepoOwner owner;
     private Integer score;
-    private Instant createdAt;
-    private Instant updatedAt;
-    private Integer starGazersCount;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime pushedAt;
+    private Integer stargazersCount;
     private Integer watchersCount;
     private Integer forksCount;
     private Boolean archived;

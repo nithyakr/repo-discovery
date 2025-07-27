@@ -1,4 +1,5 @@
 scalar DateTime
+scalar Date
 
 type Repository {
     name: String!
@@ -6,6 +7,7 @@ type Repository {
     score: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
+    pushedAt: DateTime!
     starGazersCount: Int
     watchersCount: Int
     forksCount: Int
@@ -18,6 +20,6 @@ type RepoOwner {
     url: String!
 }
 
-type QueryRepo {
-    find(createdFrom:DateTime!, language:String!): [Repository]!
+type Query {
+    find(createdFrom:Date!, language:String!): [Repository]!
 }
