@@ -23,6 +23,9 @@ query {
 }
 
 ```
+
+An [HTTP file](repositories.http) is added to simply execute a request and see the service in action
+
 ## 2. Internals 
 
 Upon a user request, the service queries the github public api to fetch matching repos for the filter criteria
