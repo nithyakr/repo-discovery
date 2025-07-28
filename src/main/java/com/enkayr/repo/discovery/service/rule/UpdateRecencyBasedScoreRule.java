@@ -21,7 +21,7 @@ public class UpdateRecencyBasedScoreRule implements ScoreRule {
                 .findFirst();
 
         matchedRange.ifPresentOrElse(range -> {
-            log.info("Repo [{}] pushed at {}. Adding score [{}]",
+            log.debug("Repo [{}] pushed at {}. Adding score [{}]",
                     repository.getName(), repository.getPushedAt(), range.getScore());
             repository.addScore(range.getScore());
         }, () -> repository.addScore(0));
