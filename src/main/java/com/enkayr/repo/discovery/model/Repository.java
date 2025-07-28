@@ -12,7 +12,7 @@ public class Repository {
     private String name;
     private String fullName;
     private RepoOwner owner;
-    private Integer score;
+    private int score;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
     private OffsetDateTime pushedAt;

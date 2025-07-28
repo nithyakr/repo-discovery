@@ -20,11 +20,11 @@ public class UpdateRecencyBasedScoreRule implements ScoreRule {
                 .filter(range -> range.includes(repository.getPushedAt()))
                 .findFirst();
 
-        matchedRange.ifPresent(range -> {
+        matchedRange.ifPresentOrElse(range -> {
             log.info("Repo [{}] pushed at {}. Adding score [{}]",
                     repository.getName(), repository.getPushedAt(), range.getScore());
             repository.addScore(range.getScore());
-        });
+        }, () -> repository.addScore(0));
     }
 
     @Getter
