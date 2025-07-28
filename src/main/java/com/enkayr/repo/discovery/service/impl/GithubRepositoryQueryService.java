@@ -2,13 +2,11 @@ package com.enkayr.repo.discovery.service.impl;
 
 import com.enkayr.repo.discovery.config.GitHubRepoConfig;
 import com.enkayr.repo.discovery.mapper.RepositoryMapper;
-import com.enkayr.repo.discovery.model.Repository;
+import com.enkayr.repo.discovery.model.RepositoryDiscoveryResponse;
 import com.enkayr.repo.discovery.model.github.GitHubSearchResponse;
 import com.enkayr.repo.discovery.service.RepositoryQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +25,7 @@ public class GithubRepositoryQueryService implements RepositoryQueryService {
     private final GitHubRepoConfig.GithubProperties githubProperties;
 
     @Override
-    public List<Repository> queryRepositories(LocalDate createdFrom, String language) {
+    public RepositoryDiscoveryResponse queryRepositories(LocalDate createdFrom, String language) {
 
         var q = String.format("language:%s", language);
 
@@ -51,9 +49,10 @@ public class GithubRepositoryQueryService implements RepositoryQueryService {
 
         var responseBody = response.getBody();
         if (responseBody != null) {
-            return responseBody.getItems().stream().map(repositoryMapper::fromGitHub).toList();
+            var items = responseBody.getItems().stream().map(repositoryMapper::fromGitHub).toList();
+            return new RepositoryDiscoveryResponse(items, responseBody.getTotalItems() == 0 ? githubProperties.getDefaultFetchCount() :  responseBody.getTotalItems());
         }
         log.info("No repositories found for language: {} from created Date: {}", language, createdFrom);
-        return List.of();
+        return new RepositoryDiscoveryResponse(List.of(), 0);
     }
 }

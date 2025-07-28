@@ -20,6 +20,11 @@ type RepoOwner {
     url: String!
 }
 
+type RepositoryDiscoveryResponse {
+    repositories: [Repository]!
+    totalItems: Int
+}
+
 type Query {
-    find(createdFrom:Date!, language:String!): [Repository]!
+    find(createdFrom:Date!, language:String!): RepositoryDiscoveryResponse!
 }

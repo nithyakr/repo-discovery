@@ -50,8 +50,8 @@ class GitHubRepositoryQueryServiceTest {
 
         var result = queryService.queryRepositories(LocalDate.now().minusMonths(3), "Java");
 
-        assertEquals(1, result.size());
-        assertEquals("sample-repo", result.get(0).getName());
+        assertEquals(30, result.getTotalItems());
+        assertEquals("sample-repo", result.getRepositories().get(0).getName());
     }
 
     @Test
@@ -62,7 +62,8 @@ class GitHubRepositoryQueryServiceTest {
         var result = queryService.queryRepositories(LocalDate.now(), "Java");
 
         assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertEquals(0, result.getTotalItems());
+        assertTrue(result.getRepositories().isEmpty());
     }
 
     @Test

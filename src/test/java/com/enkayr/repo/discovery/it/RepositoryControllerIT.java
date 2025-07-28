@@ -1,6 +1,7 @@
 package com.enkayr.repo.discovery.it;
 
 import com.enkayr.repo.discovery.model.Repository;
+import com.enkayr.repo.discovery.model.RepositoryDiscoveryResponse;
 import com.enkayr.repo.discovery.service.RepositoryQueryService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,42 +39,50 @@ class RepositoryControllerIT {
                 .build();
 
         Mockito.when(repositoryQueryService.queryRepositories(Mockito.any(), Mockito.anyString()))
-                .thenReturn(List.of(repo));
+                .thenReturn(new RepositoryDiscoveryResponse(List.of(repo), 1));
 
         var query = """
             query {
-              find(createdFrom: \"2024-01-01\", language: \"Java\") {
-                name
-                score
+              find(createdFrom: "2023-01-01", language: "Python") {
+                totalItems
+                repositories {
+                  name
+                  score
+                }
               }
             }
             """;
 
         graphQlTester.document(query)
                 .execute()
-                .path("find[0].name").entity(String.class).isEqualTo("demo-repo")
-                .path("find[0].score").entity(Integer.class).satisfies(score ->
-                        assertThat(score).isEqualTo(3500*2 + 4000*3 + 10)
+                .path("find.totalItems").entity(Integer.class).isEqualTo(1)
+                .path("find.repositories[0].name").entity(String.class).isEqualTo("demo-repo")
+                .path("find.repositories[0].score").entity(Integer.class).satisfies(score ->
+                        assertThat(score).isEqualTo(3500 * 2 + 4000 * 3 + 10)
                 );
     }
 
     @Test
     void shouldReturnEmptyListIfNoRepos() {
         Mockito.when(repositoryQueryService.queryRepositories(Mockito.any(), Mockito.anyString()))
-                .thenReturn(Collections.emptyList());
+                .thenReturn(new RepositoryDiscoveryResponse(Collections.emptyList(), 0));
 
         var query = """
             query {
-              find(createdFrom: \"2024-01-01\", language: \"Kotlin\") {
-                name
-                score
+              find(createdFrom: "2024-01-01", language: "Kotlin") {
+                totalItems
+                repositories {
+                  name
+                  score
+                }
               }
             }
             """;
 
         graphQlTester.document(query)
                 .execute()
-                .path("find").entityList(Repository.class).hasSize(0);
+                .path("find.totalItems").entity(Integer.class).isEqualTo(0)
+                .path("find.repositories").entityList(Repository.class).hasSize(0);
     }
 
     @Test
@@ -87,20 +96,23 @@ class RepositoryControllerIT {
                 .build();
 
         Mockito.when(repositoryQueryService.queryRepositories(Mockito.any(), Mockito.anyString()))
-                .thenReturn(List.of(repo));
+                .thenReturn(new RepositoryDiscoveryResponse(List.of(repo), 1));
 
         var query = """
             query {
-              find(createdFrom: \"2023-01-01\", language: \"Python\") {
-                name
-                score
+              find(createdFrom: "2023-01-01", language: "Python") {
+                totalItems
+                repositories {
+                  name
+                  score
+                }
               }
             }
             """;
 
         graphQlTester.document(query)
                 .execute()
-                .path("find[0].score").entity(Integer.class).isEqualTo(0);
+                .path("find.repositories[0].score").entity(Integer.class).isEqualTo(0);
     }
 
     @Test
@@ -115,20 +127,22 @@ class RepositoryControllerIT {
                 .build();
 
         Mockito.when(repositoryQueryService.queryRepositories(Mockito.any(), Mockito.anyString()))
-                .thenReturn(List.of(repo));
+                .thenReturn(new RepositoryDiscoveryResponse(List.of(repo), 1));
 
         var query = """
             query {
-              find(createdFrom: \"2024-01-01\", language: \"Go\") {
-                name
-                score
+              find(createdFrom: "2023-01-01", language: "Python") {
+                totalItems
+                repositories {
+                  name
+                  score
+                }
               }
             }
             """;
 
         graphQlTester.document(query)
                 .execute()
-                .path("find[0].score").entity(Integer.class).isEqualTo(10);
+                .path("find.repositories[0].score").entity(Integer.class).isEqualTo(10);
     }
 }
-

@@ -1,11 +1,10 @@
 package com.enkayr.repo.discovery.service;
 
-import com.enkayr.repo.discovery.model.Repository;
+import com.enkayr.repo.discovery.model.RepositoryDiscoveryResponse;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface RepositoryFindService {
 
-    List<Repository> findRepositories(LocalDate createdFrom, String language);
+    RepositoryDiscoveryResponse findRepositories(LocalDate createdFrom, String language);
 }

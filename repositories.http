@@ -1,8 +1,8 @@
-### GraphQL repository query
+### Find and Score Repos GraphQL query
 POST http://localhost:8080/graphql
 Content-Type: application/json
 
 {
-  "query": "query { find(createdFrom: \"2024-01-01\", language: \"Java\") { name createdAt owner { url login } score pushedAt forksCount } }"
+  "query": "query { find(createdFrom: \"2024-01-01\", language: \"Java\") { totalItems repositories { name score owner { login url } createdAt updatedAt pushedAt } } }"
 }
 
