@@ -1,5 +1,6 @@
 package com.enkayr.repo.discovery.service.rule;
 
+import com.enkayr.repo.discovery.config.RuleConfig;
 import com.enkayr.repo.discovery.model.Repository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import java.util.Comparator;
 public class UpdateRecencyBasedScoreRule implements ScoreRule {
 
     @Override
-    public void updateScore(Repository repository) {
+    public void updateScore(Repository repository, RuleConfig.RuleProperties ruleProperties) {
         var matchedRange = Arrays.stream(TimeRange.values())
                 .sorted(Comparator.comparingInt(TimeRange::getMonths))
                 .filter(range -> range.includes(repository.getPushedAt()))

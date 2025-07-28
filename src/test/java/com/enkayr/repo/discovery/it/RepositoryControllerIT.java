@@ -53,7 +53,7 @@ class RepositoryControllerIT {
                 .execute()
                 .path("find[0].name").entity(String.class).isEqualTo("demo-repo")
                 .path("find[0].score").entity(Integer.class).satisfies(score ->
-                        assertThat(score).isEqualTo(5 + 5 + 10)
+                        assertThat(score).isEqualTo(3500*2 + 4000*3 + 10)
                 );
     }
 

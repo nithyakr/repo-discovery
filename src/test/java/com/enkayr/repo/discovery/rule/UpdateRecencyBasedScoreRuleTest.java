@@ -1,5 +1,6 @@
 package com.enkayr.repo.discovery.rule;
 
+import com.enkayr.repo.discovery.config.RuleConfig;
 import com.enkayr.repo.discovery.model.Repository;
 import com.enkayr.repo.discovery.service.rule.UpdateRecencyBasedScoreRule;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class UpdateRecencyBasedScoreRuleTest {
                 .pushedAt(OffsetDateTime.now().minusMonths(4))
                 .build();
 
-        rule.updateScore(repo);
+        rule.updateScore(repo, new RuleConfig.RuleProperties());
 
         assertEquals(UpdateRecencyBasedScoreRule.TimeRange.SIX_MONTHS.getScore(), repo.getScore());
     }
@@ -35,7 +36,7 @@ public class UpdateRecencyBasedScoreRuleTest {
                 .pushedAt(OffsetDateTime.now().minusMonths(13))
                 .build();
 
-        rule.updateScore(repo);
+        rule.updateScore(repo, new RuleConfig.RuleProperties());
 
         assertEquals(0, repo.getScore());
     }

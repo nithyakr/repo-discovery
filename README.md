@@ -40,6 +40,7 @@ The scoring rules are implemented in different beans as following
 | StarBasedScoreRule          | Score based on Repository stargazersCount  |
 | UpdateRecencyBasedScoreRule | Score based on Repository pushedAt recency |
 
+A Rule property map is passed to all the scoring rules so that the scoring rules are adjusted based on contextual decisions. 
 
 ## 3. Extend
 
@@ -70,8 +71,6 @@ public class CustomScoreRule implements ScoreRule {
 ```
 ## 4. Improvements
 
-* Accept a Repository Context with context/configurations instead of the Repository in the ScoreRule 
-so that scoring algorithm can be adjusted based on contextual decisions
 * Add a custom property file for the custom beans for all the adjustable configurations and pass it to all the ScoreRules
 * Register this service as a github app and implement an app login flow so that more headroom will be available for the app in-terms of rate limiting
 * Cache the repositories in the app or on a distributed cache like Redis so that repository querying will be much faster. But since these repos are getting updates/forks/starred often, cache needs to invalidate quickly which defeats the purpose of  caching 

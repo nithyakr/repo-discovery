@@ -1,5 +1,6 @@
 package com.enkayr.repo.discovery.service;
 
+import com.enkayr.repo.discovery.config.RuleConfig;
 import com.enkayr.repo.discovery.model.Repository;
 import com.enkayr.repo.discovery.service.rule.ScoreRule;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScoringPipeline {
 
+    private final RuleConfig.RuleProperties ruleProperties;
     private final List<ScoreRule> scoringRules;
 
     public void executeScoreRules(Repository repository) {
-        scoringRules.forEach(rule -> rule.updateScore(repository));
+        scoringRules.forEach(rule -> rule.updateScore(repository, ruleProperties));
         log.info("Score for Repo {} -> {}", repository.getName(), repository.getScore());
     }
 

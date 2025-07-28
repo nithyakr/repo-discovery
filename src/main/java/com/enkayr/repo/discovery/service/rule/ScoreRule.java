@@ -1,5 +1,6 @@
 package com.enkayr.repo.discovery.service.rule;
 
+import com.enkayr.repo.discovery.config.RuleConfig;
 import com.enkayr.repo.discovery.model.Repository;
 
 /**
@@ -9,6 +10,6 @@ import com.enkayr.repo.discovery.model.Repository;
  */
 public interface ScoreRule {
 
-    void updateScore(Repository repository);
+    void updateScore(Repository repository, RuleConfig.RuleProperties ruleProperties);
 
 }

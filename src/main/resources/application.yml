@@ -14,3 +14,12 @@ github:
   read-timeout: 3s
   default-fetch-count: 100
 
+rule:
+  configs:
+    dynamic-rule-properties:
+      forks-top-weight: "3"
+      forks-mid-weight: "2"
+      forks-bot-weight: "1"
+
+      star-top-weight: "5"
+      star-mid-weight: "3"
