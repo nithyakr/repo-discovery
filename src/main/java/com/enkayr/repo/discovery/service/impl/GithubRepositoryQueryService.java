@@ -29,16 +29,16 @@ public class GithubRepositoryQueryService implements RepositoryQueryService {
     @Override
     public RepositoryDiscoveryResponse queryRepositories(LocalDate createdFrom, String language) {
 
-        var rawQuery = String.format("language:%s created:<%s", language, createdFrom);
-        var encodedQuery = UriUtils.encodeQueryParam(rawQuery, StandardCharsets.UTF_8);
+        var rawQuery = String.format("language:%s+created:>%s", language, createdFrom);
 
         var uri = UriComponentsBuilder
                 .fromPath("/search/repositories")
-                .queryParam("q", encodedQuery)
+                .queryParam("q", "{q}")
                 .queryParam("sort", "created")
                 .queryParam("order", "desc")
                 .queryParam("per_page", githubProperties.getDefaultFetchCount())
-                .build(true)
+                .build()
+                .expand(rawQuery)
                 .toUriString();
 
         log.info("Github search repositories uri: {}", uri);
