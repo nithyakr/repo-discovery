@@ -11,7 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,11 +29,12 @@ public class GithubRepositoryQueryService implements RepositoryQueryService {
     @Override
     public RepositoryDiscoveryResponse queryRepositories(LocalDate createdFrom, String language) {
 
-        var q = String.format("language:%s", language);
+        var rawQuery = String.format("language:%s created:<%s", language, createdFrom);
+        var encodedQuery = UriUtils.encodeQueryParam(rawQuery, StandardCharsets.UTF_8);
 
         var uri = UriComponentsBuilder
                 .fromPath("/search/repositories")
-                .queryParam("q", q)
+                .queryParam("q", encodedQuery)
                 .queryParam("sort", "created")
                 .queryParam("order", "desc")
                 .queryParam("per_page", githubProperties.getDefaultFetchCount())
@@ -49,10 +52,19 @@ public class GithubRepositoryQueryService implements RepositoryQueryService {
 
         var responseBody = response.getBody();
         if (responseBody != null) {
-            var items = responseBody.getItems().stream().map(repositoryMapper::fromGitHub).toList();
-            return new RepositoryDiscoveryResponse(items, responseBody.getTotalItems() == 0 ? githubProperties.getDefaultFetchCount() :  responseBody.getTotalItems());
+            var items = responseBody.getItems().stream()
+                    .map(repositoryMapper::fromGitHub)
+                    .toList();
+            return new RepositoryDiscoveryResponse(
+                    items,
+                    responseBody.getTotalItems() == 0
+                            ? githubProperties.getDefaultFetchCount()
+                            : responseBody.getTotalItems()
+            );
         }
+
         log.info("No repositories found for language: {} from created Date: {}", language, createdFrom);
         return new RepositoryDiscoveryResponse(List.of(), 0);
     }
+
 }

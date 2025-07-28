@@ -24,7 +24,6 @@ public class GitHubRepoConfig {
     public RestTemplate githubRestTemplate(GithubProperties githubProperties, ObjectMapper objectMapper) {
         return new RestTemplateBuilder()
                 .defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
-                .rootUri(githubProperties.getBaseUrl())
                 .connectTimeout(githubProperties.getConnectTimeout())
                 .readTimeout(githubProperties.getReadTimeout())
                 .messageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
